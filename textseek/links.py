@@ -29,7 +29,7 @@ def parse_link(url: str, start: int, end: int) -> LinkResult:
         path=parts.path,
         query=parts.query,
         fragment=parts.fragment,
-        query_params=parse_qs(parts.query),
+        query_params=parse_qs(parts.query, keep_blank_values=True),
     )
 
 
@@ -45,5 +45,5 @@ def parse_sample(sample: str) -> tuple[str, str, str | None, tuple[str, ...] | N
     parts = urlsplit(sample)
     if not parts.scheme or not parts.hostname:
         raise InvalidSampleLinkError(f"Некорректный пример ссылки: {sample!r}")
-    keys = tuple(parse_qs(parts.query).keys()) or None
+    keys = tuple(parse_qs(parts.query, keep_blank_values=True).keys()) or None
     return parts.scheme, parts.hostname, (parts.path or None), keys
