@@ -1,7 +1,10 @@
 ---
 title: Extract
-description: API reference for the Extract factory
+description: API reference for the Extract factory — code, link, regex
 ---
+
+`Extract` is a factory of immutable, eagerly validated spec objects. You never
+construct `CodeSpec` / `LinkSpec` / `RegexSpec` directly.
 
 ## `Extract.code`
 
@@ -22,7 +25,38 @@ Extract.code(
 ) -> CodeSpec
 ```
 
-Raises `InvalidCodeSpecError` on contradictory settings.
+| Parameter | Type | Default | Purpose |
+|---|---|---|---|
+| `length` | `int \| None` | `None` | Exact token length. Mutually exclusive with `min_length`/`max_length`. |
+| `min_length` | `int \| None` | `None` | Minimum length (defaults to 1 when only `max_length` is set). |
+| `max_length` | `int \| None` | `None` | Maximum length (unbounded if omitted). |
+| `digits` | `bool` | `True` | Allow `0-9`. |
+| `alphabet` | `bool` | `False` | Allow letters (see `uppercase`/`lowercase`). |
+| `symbols` | `bool` | `False` | Allow the default symbol set `-` and `_`. |
+| `uppercase` | `bool` | `True` | When `alphabet`, allow `A-Z`. |
+| `lowercase` | `bool` | `True` | When `alphabet`, allow `a-z`. |
+| `require_each_type` | `bool` | `False` | Require ≥1 char of every enabled class (post-filter). |
+| `near` | `str \| None` | `None` | Anchor phrase; results are ranked by proximity (see below). |
+| `window` | `int` | `300` | Chars scanned on **each** side of the `near` phrase. |
+| `pattern` | `str \| None` | `None` | Raw regex; bypasses the builder and the validation above. |
+
+**Defaults:** `Extract.code()` with no arguments matches digit-only tokens of
+length ≥ 1.
+
+**Token boundaries are class-relative.** A match must be bordered by characters
+*outside the allowed class*, not by word boundaries. So with `digits=True`,
+`length=4`, `"ab1234"` yields `"1234"` (letters aren't digits), but `"1234567890"`
+yields nothing for `length=6` (every neighbour is also a digit).
+
+**`require_each_type`** rejects tokens missing an enabled class: with
+`digits=True, alphabet=True, require_each_type=True`, `"A1B2C3D4"` passes while
+`"12345678"` and `"ABCDEFGH"` are rejected.
+
+Raises `InvalidCodeSpecError` on contradictory settings: `length` together with
+`min_length`/`max_length`; `length`/`min_length` < 1; `min_length > max_length`;
+no character class enabled; `alphabet=True` with both `uppercase` and
+`lowercase` off; negative `window`. (With `pattern` set, only `window` is
+validated.)
 
 ## `Extract.link`
 
@@ -38,12 +72,30 @@ Extract.link(
 ) -> LinkSpec
 ```
 
-Raises `InvalidSampleLinkError` if `sample` is not a valid URL.
+| Parameter | Type | Default | Purpose |
+|---|---|---|---|
+| `sample` | `str \| None` | `None` | Example URL; its scheme, host, path, and query **keys** become filters (explicit args win). |
+| `scheme` | `str \| None` | `None` | Exact scheme match (only `http`/`https` are ever discovered). |
+| `domain` | `str \| None` | `None` | Exact hostname match (use `allow_subdomains` to widen). |
+| `path` | `str \| None` | `None` | Exact path match. |
+| `path_contains` | `str \| None` | `None` | Substring match on path. |
+| `required_query` | `list[str] \| None` | `None` | Query keys that must be present (values not compared). |
+| `allow_subdomains` | `bool` | `False` | Also match `*.domain`. |
+
+**Recognised schemes:** link discovery only finds `http://` and `https://`
+URLs. `ftp://`, `mailto:`, etc. are never returned, regardless of `scheme`.
+
+Raises `InvalidSampleLinkError` if `sample` lacks a scheme or host.
 
 ## `Extract.regex`
 
 ```python
 Extract.regex(pattern: str, flags: int = 0) -> RegexSpec
 ```
+
+| Parameter | Type | Default | Purpose |
+|---|---|---|---|
+| `pattern` | `str` | — | Regular expression, compiled immediately. |
+| `flags` | `int` | `0` | `re` flags (e.g. `re.IGNORECASE`). |
 
 Raises `RegexExtractError` if `pattern` does not compile.
