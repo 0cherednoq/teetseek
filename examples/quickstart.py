@@ -26,7 +26,7 @@ def main() -> None:
 
     code = seek.extract_one(
         Extract.code(
-            min_length=5,
+            min_length=9,
             max_length=9,
             digits=True,
             alphabet=True,
