@@ -58,3 +58,21 @@ def test_near_window_excludes_far_codes():
     )
     results = ex.find_all(text)
     assert [r.value for r in results] == ["123456"]
+
+
+def test_near_ignores_phrase_word_that_is_itself_a_candidate():
+    # "confirmation" (12 chars) is a valid min8-max12 alnum token and overlaps
+    # the phrase "confirmation code"; it must NOT win over the real code after it.
+    text = "Your confirmation code is A8F3-K2P9. Enter it soon."
+    ex = CodeExtractor(
+        Extract.code(
+            min_length=8,
+            max_length=12,
+            digits=True,
+            alphabet=True,
+            symbols=True,
+            near="confirmation code",
+        )
+    )
+    results = ex.find_all(text)
+    assert results[0].value == "A8F3-K2P9"

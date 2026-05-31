@@ -57,10 +57,12 @@ def _near_rank(result: CodeResult, phrase_start: int, phrase_end: int) -> tuple[
 
     Коды после фразы важнее кодов перед ней («ваш код: XXX»), а среди них
     ближний важнее дальнего. Если кодов после фразы нет — берём ближайший
-    перед фразой (например, "G-4471 is your verification code").
+    перед фразой (например, "G-4471 is your verification code"). Кандидат,
+    пересекающийся с самой фразой (это слово фразы, а не код рядом), ранжируется
+    последним — например, "confirmation" в "confirmation code".
     """
     if result.start >= phrase_end:
         return (0, result.start - phrase_end)
     if result.end <= phrase_start:
         return (1, phrase_start - result.end)
-    return (0, 0)
+    return (2, 0)
