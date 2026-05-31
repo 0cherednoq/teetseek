@@ -4,6 +4,8 @@ description: Build filters from a sample URL
 ---
 
 ```python
+from textseek import TextSeek, Extract
+
 link = TextSeek(text).extract_one(
     Extract.link(
         sample="https://example.com/auth/magic?token=abc&email=test@example.com"
@@ -20,3 +22,6 @@ https://example.com/auth/magic?token=REAL_TOKEN&email=user@example.com
 ```
 
 An invalid sample URL raises `InvalidSampleLinkError`.
+
+Only the query **keys** from the sample become filters, never the values, and
+explicit `Extract.link(...)` arguments override anything derived from `sample`.

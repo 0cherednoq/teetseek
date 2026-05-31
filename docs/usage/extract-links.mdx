@@ -4,6 +4,8 @@ description: Links as structured objects
 ---
 
 ```python
+from textseek import TextSeek, Extract
+
 links = TextSeek(text).extract_all(Extract.link())
 ```
 
@@ -29,3 +31,10 @@ Extract.link(domain="example.com", path_contains="magic")
 Extract.link(domain="example.com", required_query=["token", "email"])
 Extract.link(domain="example.com", allow_subdomains=True)
 ```
+
+<Note>
+Only `http://` and `https://` URLs are discovered — `ftp://`, `mailto:`, etc.
+are never returned. Trailing punctuation (`.,;:!?)]}>"'`) is stripped from each
+match, so a URL ending a sentence keeps a clean `value`. `domain` and `host`
+hold the same hostname.
+</Note>

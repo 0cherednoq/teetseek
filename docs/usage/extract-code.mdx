@@ -34,21 +34,33 @@ Extract.code(length=8, digits=True, alphabet=True, require_each_type=True)
 ## Near a phrase
 
 ```python
-Extract.code(length=6, digits=True, near="verification code", window=300)
+from textseek import TextSeek, Extract
+
+text = "Ignore 111111. Your verification code is 654321."
+code = TextSeek(text).extract_one(
+    Extract.code(length=6, digits=True, near="verification code")
+)
+print(code.value)  # 654321
 ```
 
-The library finds the phrase, takes a window around it, and prefers the code
-that appears **after** the phrase (the usual "your code is XXX" pattern),
-falling back to the nearest code before the phrase if none follow. Useful when
-several numbers appear in the text.
+`window` chars are scanned on **each side** of the phrase (300 by default). Codes
+that appear **after** the phrase outrank codes before it (the usual "your code is
+XXX"), and nearer outranks farther. If no code follows the phrase, the nearest
+one before it is used:
 
-<Note>
-With `near`, `extract_all` returns matches ordered by proximity to the phrase
-(nearest first), not in source-text order. `extract_one`/`extract_first`
-therefore return the best-ranked code.
-</Note>
+```python
+TextSeek("G-447103 is your verification code").extract_one(
+    Extract.code(length=6, digits=True, near="verification code")
+).value  # 447103
+```
+
+With `near`, `extract_all` returns matches ordered by rank (best first), so for
+the first example it is `["654321", "111111"]`.
 
 ## Strict boundaries
 
-A code is matched as a whole token. `Extract.code(length=6, digits=True)` does
-**not** match `123456` inside `1234567890`.
+A code is matched as a whole token, bordered by characters **outside its allowed
+character class**. `Extract.code(length=6, digits=True)` does not match `123456`
+inside `1234567890` (all neighbours are digits). But `Extract.code(length=4,
+digits=True)` does match `1234` inside `ab1234`, because letters are not in the
+digit class.

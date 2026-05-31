@@ -7,10 +7,11 @@ description: Predictable exceptions
 from textseek import TextSeek, Extract
 from textseek import ExtractNotFoundError, InvalidCodeSpecError
 
+text = "no code here"
 try:
     code = TextSeek(text).extract_one(Extract.code(length=6))
 except ExtractNotFoundError:
-    print("Code not found")
+    print("Code not found")        # printed for this text
 except InvalidCodeSpecError:
     print("Bad code settings")
 ```

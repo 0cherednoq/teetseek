@@ -4,10 +4,14 @@ description: Arbitrary extraction
 ---
 
 ```python
-result = TextSeek(text).extract_one(Extract.regex(r"Order ID:\s*([A-Z0-9\-]+)"))
-result.value       # first group if the pattern has groups, else the whole match
-result.groups      # tuple of groups
-result.groupdict   # named groups
+from textseek import TextSeek, Extract
+
+result = TextSeek("Order ID: AB-9921").extract_one(
+    Extract.regex(r"Order ID:\s*([A-Z0-9\-]+)")
+)
+print(result.value)  # AB-9921 (the first group, since the pattern has groups)
+result.groups        # tuple of groups
+result.groupdict     # named groups
 result.start
 result.end
 ```
