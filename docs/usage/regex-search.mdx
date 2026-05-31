@@ -1,0 +1,16 @@
+---
+title: Regex search
+description: Arbitrary extraction
+---
+
+```python
+result = TextSeek(text).extract_one(Extract.regex(r"Order ID:\s*([A-Z0-9\-]+)"))
+result.value       # first group if the pattern has groups, else the whole match
+result.groups      # tuple of groups
+result.groupdict   # named groups
+result.start
+result.end
+```
+
+If the pattern has groups, `value` is the first group; otherwise it is the full
+match. An invalid pattern raises `RegexExtractError` at `Extract.regex` time.

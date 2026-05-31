@@ -1,0 +1,15 @@
+---
+title: Errors
+description: Exception hierarchy
+---
+
+```text
+TextSeekError
+├── ExtractNotFoundError      # no match (extract_one)
+├── InvalidExtractSpecError   # unrecognized spec
+├── InvalidSampleLinkError    # bad sample URL
+├── InvalidCodeSpecError      # contradictory code settings
+└── RegexExtractError         # pattern failed to compile
+```
+
+All inherit from `TextSeekError`, so you can catch everything with one except.

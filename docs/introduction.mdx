@@ -1,0 +1,27 @@
+---
+title: Introduction
+description: What textseek does and what it does not do
+---
+
+`textseek` is a zero-dependency Python library for searching and extracting
+structured data from plain text: confirmation codes, links, and arbitrary
+regex matches.
+
+## What it does
+
+- Find numeric, alphanumeric, and symbol-bearing confirmation codes
+- Extract links as rich objects with `scheme`, `domain`, `path`, `query_params`
+- Filter links by domain, path, query params, or an example link
+- Run arbitrary regex extraction with typed results
+
+## What it does NOT do
+
+`textseek` is **not** a mail/HTTP library. It contains no IMAP, Gmail/Outlook
+API, SMTP, HTTP client, OAuth2, database, or provider-specific parsing. Getting
+the text (from email, SMS, API, browser, OCR) is the caller's responsibility —
+`textseek` only operates on the text you hand it.
+
+```python
+email_text = email.text + "\n" + email.html
+code = TextSeek(email_text).extract_one(Extract.code(length=6))
+```

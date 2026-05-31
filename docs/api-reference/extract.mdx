@@ -1,0 +1,49 @@
+---
+title: Extract
+description: API reference for the Extract factory
+---
+
+## `Extract.code`
+
+```python
+Extract.code(
+    length: int | None = None,
+    min_length: int | None = None,
+    max_length: int | None = None,
+    digits: bool = True,
+    alphabet: bool = False,
+    symbols: bool = False,
+    uppercase: bool = True,
+    lowercase: bool = True,
+    require_each_type: bool = False,
+    near: str | None = None,
+    window: int = 300,
+    pattern: str | None = None,
+) -> CodeSpec
+```
+
+Raises `InvalidCodeSpecError` on contradictory settings.
+
+## `Extract.link`
+
+```python
+Extract.link(
+    sample: str | None = None,
+    scheme: str | None = None,
+    domain: str | None = None,
+    path: str | None = None,
+    path_contains: str | None = None,
+    required_query: list[str] | None = None,
+    allow_subdomains: bool = False,
+) -> LinkSpec
+```
+
+Raises `InvalidSampleLinkError` if `sample` is not a valid URL.
+
+## `Extract.regex`
+
+```python
+Extract.regex(pattern: str, flags: int = 0) -> RegexSpec
+```
+
+Raises `RegexExtractError` if `pattern` does not compile.

@@ -1,0 +1,31 @@
+---
+title: Extract links
+description: Links as structured objects
+---
+
+```python
+links = TextSeek(text).extract_all(Extract.link())
+```
+
+Links come back as `LinkResult` objects, never plain strings:
+
+```python
+link = TextSeek(text).extract_one(Extract.link(domain="example.com"))
+link.value
+link.scheme        # "https"
+link.domain        # "example.com"
+link.path          # "/auth/magic"
+link.query         # "token=abc123&email=test@example.com"
+link.fragment      # "top"
+link.query_params  # {"token": ["abc123"], "email": ["test@example.com"]}
+```
+
+## Filtering
+
+```python
+Extract.link(domain="example.com")
+Extract.link(domain="example.com", path="/auth/magic")
+Extract.link(domain="example.com", path_contains="magic")
+Extract.link(domain="example.com", required_query=["token", "email"])
+Extract.link(domain="example.com", allow_subdomains=True)
+```

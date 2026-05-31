@@ -1,0 +1,31 @@
+---
+title: Quickstart
+description: Extract your first code in under a minute
+---
+
+## Install
+
+```bash
+pip install textseek
+```
+
+Requires Python 3.12+. No runtime dependencies.
+
+## Extract a code
+
+```python
+from textseek import TextSeek, Extract
+
+text = "Your verification code is 123456"
+result = TextSeek(text).extract_one(Extract.code(length=6, digits=True))
+print(result.value)  # 123456
+print(result.start, result.end)
+```
+
+## Extract links
+
+```python
+links = TextSeek(text).extract_all(Extract.link())
+for link in links:
+    print(link.domain, link.path)
+```

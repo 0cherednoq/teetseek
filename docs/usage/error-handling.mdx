@@ -1,0 +1,19 @@
+---
+title: Error handling
+description: Predictable exceptions
+---
+
+```python
+from textseek import TextSeek, Extract
+from textseek import ExtractNotFoundError, InvalidCodeSpecError
+
+try:
+    code = TextSeek(text).extract_one(Extract.code(length=6))
+except ExtractNotFoundError:
+    print("Code not found")
+except InvalidCodeSpecError:
+    print("Bad code settings")
+```
+
+All exceptions subclass `TextSeekError`. See the
+[errors reference](/api-reference/errors).

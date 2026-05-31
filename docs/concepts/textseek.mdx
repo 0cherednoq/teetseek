@@ -1,0 +1,22 @@
+---
+title: TextSeek
+description: The entry point object
+---
+
+`TextSeek(text)` wraps a string and exposes four methods. Each takes an
+`Extract` spec and dispatches to the matching extractor.
+
+| Method | Returns |
+|---|---|
+| `extract_one` | one result, or raises `ExtractNotFoundError` |
+| `extract_first` | first result, or `None` |
+| `extract_all` | list of results (possibly empty) |
+| `contains` | `bool` |
+
+```python
+seek = TextSeek("Your code is 123456")
+seek.extract_one(Extract.code(length=6))
+seek.extract_first(Extract.link())
+seek.extract_all(Extract.regex(r"\d+"))
+seek.contains(Extract.code(length=6))
+```

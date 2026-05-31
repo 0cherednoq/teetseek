@@ -1,0 +1,35 @@
+---
+title: TextSeek
+description: API reference for the TextSeek class
+---
+
+## `extract_one`
+
+Finds one match for the given spec.
+
+### Signature
+
+```python
+def extract_one(self, spec: ExtractSpec) -> ExtractResult
+```
+
+### Returns
+
+One of `CodeResult`, `LinkResult`, `RegexResult`, depending on the spec.
+
+### Raises
+
+- `ExtractNotFoundError` — no match
+- `InvalidExtractSpecError` — unrecognized spec
+
+## `extract_first`
+
+Returns the first match or `None`. Same signature, returns `ExtractResult | None`.
+
+## `extract_all`
+
+Returns a list of matches (empty if none). Returns `list[ExtractResult]`.
+
+## `contains`
+
+Returns `bool` — whether any match exists.

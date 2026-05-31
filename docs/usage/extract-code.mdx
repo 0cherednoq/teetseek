@@ -1,0 +1,48 @@
+---
+title: Extract codes
+description: Numeric, alphanumeric, and symbol codes
+---
+
+## Numeric code
+
+```python
+TextSeek(text).extract_one(Extract.code(length=6, digits=True))
+```
+
+## Alphanumeric code
+
+```python
+Extract.code(length=8, digits=True, alphabet=True)  # matches A1B2C3D4
+```
+
+## Code with symbols
+
+```python
+Extract.code(min_length=8, max_length=16, digits=True, alphabet=True, symbols=True)
+# matches A8F3-K2P9
+```
+
+The default symbol set is `-` and `_`.
+
+## Require each type
+
+```python
+Extract.code(length=8, digits=True, alphabet=True, require_each_type=True)
+# matches A1B2C3D4, rejects 12345678 and ABCDEFGH
+```
+
+## Near a phrase
+
+```python
+Extract.code(length=6, digits=True, near="verification code", window=300)
+```
+
+The library finds the phrase, takes a window around it, and prefers the code
+that appears **after** the phrase (the usual "your code is XXX" pattern),
+falling back to the nearest code before the phrase if none follow. Useful when
+several numbers appear in the text.
+
+## Strict boundaries
+
+A code is matched as a whole token. `Extract.code(length=6, digits=True)` does
+**not** match `123456` inside `1234567890`.
