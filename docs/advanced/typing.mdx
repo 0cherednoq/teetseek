@@ -7,6 +7,9 @@ description: How textseek keeps results typed
 so your IDE narrows the result automatically:
 
 ```python
+from textseek import TextSeek, Extract
+
+seek = TextSeek(text)
 code = seek.extract_one(Extract.code(length=6))   # CodeResult
 link = seek.extract_one(Extract.link())            # LinkResult
 link.query_params["token"][0]                      # fully typed

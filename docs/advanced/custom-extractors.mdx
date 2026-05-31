@@ -16,3 +16,6 @@ class Extractor(Protocol):
 To add a new kind of extraction, write a spec dataclass, a factory method, and
 an extractor class with `find_all`, then register it in `TextSeek._extractor`.
 The built-in `code`, `link`, and `regex` extractors follow exactly this shape.
+
+`TextSeek._extractor` dispatches by spec class, so your new spec type needs a
+branch there. Export any new public names from `textseek/__init__.py`.
