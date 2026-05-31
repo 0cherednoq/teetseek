@@ -4,6 +4,8 @@ description: Ссылки как структурированные объект
 ---
 
 ```python
+from textseek import TextSeek, Extract
+
 links = TextSeek(text).extract_all(Extract.link())
 ```
 
@@ -29,3 +31,10 @@ Extract.link(domain="example.com", path_contains="magic")
 Extract.link(domain="example.com", required_query=["token", "email"])
 Extract.link(domain="example.com", allow_subdomains=True)
 ```
+
+<Note>
+Находятся только ссылки `http://` и `https://` — `ftp://`, `mailto:` и т. п. не
+возвращаются никогда. Хвостовая пунктуация (`.,;:!?)]}>"'`) отрезается от каждого
+совпадения, поэтому у ссылки в конце предложения `value` остаётся чистым.
+`domain` и `host` содержат один и тот же хост.
+</Note>

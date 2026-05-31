@@ -1,7 +1,10 @@
 ---
 title: Extract
-description: Справочник API для фабрики Extract
+description: Справочник API для фабрики Extract — code, link, regex
 ---
+
+`Extract` — это фабрика неизменяемых, заранее проверяемых объектов-спецификаций.
+Классы `CodeSpec` / `LinkSpec` / `RegexSpec` напрямую создавать не нужно.
 
 ## `Extract.code`
 
@@ -22,7 +25,38 @@ Extract.code(
 ) -> CodeSpec
 ```
 
-Вызывает `InvalidCodeSpecError` при противоречивых настройках.
+| Параметр | Тип | По умолчанию | Назначение |
+|---|---|---|---|
+| `length` | `int \| None` | `None` | Точная длина токена. Несовместимо с `min_length`/`max_length`. |
+| `min_length` | `int \| None` | `None` | Минимальная длина (по умолчанию 1, если задан только `max_length`). |
+| `max_length` | `int \| None` | `None` | Максимальная длина (без ограничения, если не задано). |
+| `digits` | `bool` | `True` | Разрешить `0-9`. |
+| `alphabet` | `bool` | `False` | Разрешить буквы (см. `uppercase`/`lowercase`). |
+| `symbols` | `bool` | `False` | Разрешить набор символов по умолчанию: `-` и `_`. |
+| `uppercase` | `bool` | `True` | При `alphabet` разрешить `A-Z`. |
+| `lowercase` | `bool` | `True` | При `alphabet` разрешить `a-z`. |
+| `require_each_type` | `bool` | `False` | Требовать ≥1 символа каждого включённого класса (пост-фильтр). |
+| `near` | `str \| None` | `None` | Якорная фраза; результаты ранжируются по близости (см. ниже). |
+| `window` | `int` | `300` | Сколько символов сканируется с **каждой** стороны фразы `near`. |
+| `pattern` | `str \| None` | `None` | Сырой regex; в обход построителя и валидации выше. |
+
+**По умолчанию:** `Extract.code()` без аргументов находит токены только из цифр
+длиной ≥ 1.
+
+**Границы токена — по разрешённому классу символов.** Совпадение должно
+граничить с символами *вне разрешённого класса*, а не по границам слов. Так, при
+`digits=True`, `length=4` строка `"ab1234"` даёт `"1234"` (буквы не цифры), а
+`"1234567890"` не даёт ничего при `length=6` (каждый сосед — тоже цифра).
+
+**`require_each_type`** отбрасывает токены, в которых нет хотя бы одного символа
+включённого класса: при `digits=True, alphabet=True, require_each_type=True`
+`"A1B2C3D4"` проходит, а `"12345678"` и `"ABCDEFGH"` отклоняются.
+
+Вызывает `InvalidCodeSpecError` при противоречивых настройках: `length` вместе с
+`min_length`/`max_length`; `length`/`min_length` < 1; `min_length > max_length`;
+не включён ни один класс символов; `alphabet=True` при выключенных `uppercase` и
+`lowercase`; отрицательный `window`. (При заданном `pattern` проверяется только
+`window`.)
 
 ## `Extract.link`
 
@@ -38,12 +72,30 @@ Extract.link(
 ) -> LinkSpec
 ```
 
-Вызывает `InvalidSampleLinkError`, если `sample` не является допустимым URL.
+| Параметр | Тип | По умолчанию | Назначение |
+|---|---|---|---|
+| `sample` | `str \| None` | `None` | Пример URL; его схема, хост, путь и **ключи** query становятся фильтрами (явные аргументы важнее). |
+| `scheme` | `str \| None` | `None` | Точное совпадение схемы (находятся только `http`/`https`). |
+| `domain` | `str \| None` | `None` | Точное совпадение хоста (расширить через `allow_subdomains`). |
+| `path` | `str \| None` | `None` | Точное совпадение пути. |
+| `path_contains` | `str \| None` | `None` | Совпадение по подстроке пути. |
+| `required_query` | `list[str] \| None` | `None` | Ключи query, которые должны присутствовать (значения не сравниваются). |
+| `allow_subdomains` | `bool` | `False` | Также сопоставлять `*.domain`. |
+
+**Распознаваемые схемы:** находятся только ссылки `http://` и `https://`.
+`ftp://`, `mailto:` и т. п. не возвращаются никогда, независимо от `scheme`.
+
+Вызывает `InvalidSampleLinkError`, если у `sample` нет схемы или хоста.
 
 ## `Extract.regex`
 
 ```python
 Extract.regex(pattern: str, flags: int = 0) -> RegexSpec
 ```
+
+| Параметр | Тип | По умолчанию | Назначение |
+|---|---|---|---|
+| `pattern` | `str` | — | Регулярное выражение, компилируется сразу. |
+| `flags` | `int` | `0` | Флаги `re` (например, `re.IGNORECASE`). |
 
 Вызывает `RegexExtractError`, если `pattern` не компилируется.

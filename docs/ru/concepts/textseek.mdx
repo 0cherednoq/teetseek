@@ -20,3 +20,10 @@ seek.extract_first(Extract.link())
 seek.extract_all(Extract.regex(r"\d+"))
 seek.contains(Extract.code(length=6))
 ```
+
+<Note>
+`extract_all` возвращает совпадения в порядке исходного текста, **кроме**
+`Extract.code(near=...)`, где результаты ранжируются по близости к фразе (сначала
+коды после фразы). `extract_one`/`extract_first` затем возвращают лучшее по рангу
+совпадение.
+</Note>

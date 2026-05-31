@@ -1,15 +1,25 @@
 ---
 title: Ошибки
-description: Иерархия исключений
+description: Иерархия исключений и что их вызывает
 ---
 
 ```text
-TextSeekError
-├── ExtractNotFoundError      # no match (extract_one)
-├── InvalidExtractSpecError   # unrecognized spec
-├── InvalidSampleLinkError    # bad sample URL
-├── InvalidCodeSpecError      # contradictory code settings
-└── RegexExtractError         # pattern failed to compile
+TextSeekError                 # базовое — ловите его для всего
+├── ExtractNotFoundError      # extract_one не нашёл совпадения
+├── InvalidExtractSpecError   # TextSeek получил нераспознанный тип спецификации
+├── InvalidSampleLinkError    # у URL в Extract.link(sample=...) нет схемы/хоста
+├── InvalidCodeSpecError      # настройки Extract.code(...) противоречат друг другу
+└── RegexExtractError         # шаблон Extract.regex(...) не скомпилировался
 ```
 
-Все наследуют от `TextSeekError`, поэтому можно перехватить все ошибки одним блоком `except`.
+| Исключение | Кто вызывает | Когда |
+|---|---|---|
+| `ExtractNotFoundError` | `extract_one` | Совпадений в тексте нет. |
+| `InvalidExtractSpecError` | диспетчер `TextSeek` | Спецификация неизвестного типа. |
+| `InvalidSampleLinkError` | `Extract.link` | У `sample` нет схемы или хоста. |
+| `InvalidCodeSpecError` | `Extract.code` | Противоречивые настройки кода (см. справочник Extract). |
+| `RegexExtractError` | `Extract.regex` | Шаблон не компилируется. |
+
+Все наследуют от `TextSeekError`, поэтому один `except TextSeekError` ловит любую
+ошибку библиотеки. Ошибки валидации возникают в момент `Extract.*`, ещё до
+запуска поиска.

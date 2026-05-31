@@ -1,19 +1,39 @@
 ---
 title: Результаты
-description: Датаклассы результатов
+description: Датаклассы результатов и их поля
 ---
 
-Все результаты — это `@dataclass(slots=True, frozen=True)`.
+Все результаты — это `@dataclass(slots=True, frozen=True)` с общими полями
+`value`, `start`, `end`.
+
+| Поле | Тип | Значение |
+|---|---|---|
+| `value` | `str` | Найденная подстрока. Для ссылок хвостовая пунктуация `.,;:!?)]}>"'` отрезается. |
+| `start` | `int` | Начальный индекс в исходном тексте. |
+| `end` | `int` | Конечный индекс (не включая) в исходном тексте. |
 
 ## CodeResult
 
-`value: str`, `start: int`, `end: int`
+Ничего не добавляет сверх `value`, `start`, `end`.
 
 ## LinkResult
 
-`value`, `start`, `end`, `scheme`, `domain`, `host`, `port: int | None`,
-`path`, `query`, `fragment`, `query_params: dict[str, list[str]]`
+| Поле | Тип | Примечания |
+|---|---|---|
+| `scheme` | `str` | Например, `"https"`. |
+| `domain` | `str` | Хост. **Псевдоним `host`** — то же значение. |
+| `host` | `str` | Хост. |
+| `port` | `int \| None` | `None`, если отсутствует или некорректен. |
+| `path` | `str` | Например, `"/auth/magic"`. |
+| `query` | `str` | Сырая строка query. |
+| `fragment` | `str` | Часть после `#`. |
+| `query_params` | `dict[str, list[str]]` | Разобранный query; пустые значения сохраняются (`?a=` → `{"a": [""]}`). |
 
 ## RegexResult
 
-`value`, `start`, `end`, `groups: tuple[str, ...]`, `groupdict: dict[str, str]`
+| Поле | Тип | Примечания |
+|---|---|---|
+| `groups` | `tuple[str, ...]` | Позиционные группы. |
+| `groupdict` | `dict[str, str]` | Именованные группы. |
+
+`value` — это первая группа, если в шаблоне есть группы, иначе всё совпадение.

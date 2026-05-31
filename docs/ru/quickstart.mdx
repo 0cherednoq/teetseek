@@ -25,7 +25,8 @@ print(result.start, result.end)
 ## Извлечение ссылок
 
 ```python
+text = "Open https://example.com/auth/magic?token=abc to continue."
 links = TextSeek(text).extract_all(Extract.link())
 for link in links:
-    print(link.domain, link.path)
+    print(link.domain, link.path)  # example.com /auth/magic
 ```

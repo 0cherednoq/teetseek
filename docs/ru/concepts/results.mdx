@@ -7,10 +7,17 @@ description: Типизированные объекты результатов
 
 | Поле | Значение |
 |---|---|
-| `value` | найденное значение |
+| `value` | найденное значение (для ссылок хвостовая пунктуация отрезается) |
 | `start` | начальный индекс в исходном тексте |
-| `end` | конечный индекс в исходном тексте |
+| `end` | конечный индекс (не включая) в исходном тексте |
 
-`CodeResult` не добавляет дополнительных полей. `LinkResult` добавляет `scheme`, `domain`, `host`,
-`port`, `path`, `query`, `fragment`, `query_params`. `RegexResult` добавляет
-`groups` и `groupdict`.
+`CodeResult` не добавляет дополнительных полей.
+
+`LinkResult` добавляет `scheme`, `domain`, `host`, `port`, `path`, `query`,
+`fragment` и `query_params`. **`domain` и `host` — это один и тот же хост**,
+`domain` — удобный псевдоним. `query_params` сохраняет пустые значения
+(`?flag=` → `{"flag": [""]}`).
+
+`RegexResult` добавляет `groups` (позиционные) и `groupdict` (именованные).
+
+Полные типы см. в [справочнике результатов](/ru/api-reference/results).

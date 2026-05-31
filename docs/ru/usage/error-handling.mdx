@@ -7,13 +7,14 @@ description: Предсказуемые исключения
 from textseek import TextSeek, Extract
 from textseek import ExtractNotFoundError, InvalidCodeSpecError
 
+text = "no code here"
 try:
     code = TextSeek(text).extract_one(Extract.code(length=6))
 except ExtractNotFoundError:
-    print("Code not found")
+    print("Code not found")        # печатается для этого текста
 except InvalidCodeSpecError:
     print("Bad code settings")
 ```
 
 Все исключения наследуют `TextSeekError`. Смотрите
-[справочник по ошибкам](/api-reference/errors).
+[справочник по ошибкам](/ru/api-reference/errors).

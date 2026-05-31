@@ -3,33 +3,30 @@ title: TextSeek
 description: Справочник API для класса TextSeek
 ---
 
-## `extract_one`
+`TextSeek(text: str)` оборачивает строку. Каждый метод принимает спецификацию
+`Extract` и перегружен (`@overload`) по типу спецификации, поэтому тип результата
+сужается автоматически.
 
-Находит одно совпадение для заданной спецификации.
+## `extract_one(spec) -> ExtractResult`
 
-### Сигнатура
+Лучшее единственное совпадение. Возвращает `CodeResult` / `LinkResult` /
+`RegexResult` в зависимости от спецификации.
 
-```python
-def extract_one(self, spec: ExtractSpec) -> ExtractResult
-```
+Вызывает `ExtractNotFoundError`, если совпадений нет; `InvalidExtractSpecError`,
+если тип спецификации не распознан.
 
-### Возвращает
+## `extract_first(spec) -> ExtractResult | None`
 
-Один из `CodeResult`, `LinkResult`, `RegexResult` — в зависимости от спецификации.
+Первое совпадение или `None`. При `near` «первое» означает лучшее по рангу, а не
+по порядку в тексте.
 
-### Вызывает
+## `extract_all(spec) -> list[ExtractResult]`
 
-- `ExtractNotFoundError` — совпадение не найдено
-- `InvalidExtractSpecError` — неизвестная спецификация
+Все совпадения (пустой список, если нет). Для `code` с `near` результаты
+упорядочены по близости к фразе (сначала после фразы); иначе — в порядке
+исходного текста.
 
-## `extract_first`
+## `contains(spec) -> bool`
 
-Возвращает первое совпадение или `None`. Та же сигнатура, возвращает `ExtractResult | None`.
-
-## `extract_all`
-
-Возвращает список совпадений (пустой, если ничего не найдено). Возвращает `list[ExtractResult]`.
-
-## `contains`
-
-Возвращает `bool` — существует ли хотя бы одно совпадение.
+`True`, если есть хотя бы одно совпадение. Эквивалентно
+`extract_first(spec) is not None`.
