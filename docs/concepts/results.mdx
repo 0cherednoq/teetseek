@@ -1,0 +1,16 @@
+---
+title: Results
+description: Typed result objects
+---
+
+Every result is a frozen dataclass with `value`, `start`, and `end`:
+
+| Field | Meaning |
+|---|---|
+| `value` | the matched value |
+| `start` | start index in the source text |
+| `end` | end index in the source text |
+
+`CodeResult` adds nothing more. `LinkResult` adds `scheme`, `domain`, `host`,
+`port`, `path`, `query`, `fragment`, `query_params`. `RegexResult` adds
+`groups` and `groupdict`.

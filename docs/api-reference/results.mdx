@@ -1,0 +1,19 @@
+---
+title: Results
+description: Result dataclasses
+---
+
+All results are `@dataclass(slots=True, frozen=True)`.
+
+## CodeResult
+
+`value: str`, `start: int`, `end: int`
+
+## LinkResult
+
+`value`, `start`, `end`, `scheme`, `domain`, `host`, `port: int | None`,
+`path`, `query`, `fragment`, `query_params: dict[str, list[str]]`
+
+## RegexResult
+
+`value`, `start`, `end`, `groups: tuple[str, ...]`, `groupdict: dict[str, str]`

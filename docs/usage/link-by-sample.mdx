@@ -1,0 +1,22 @@
+---
+title: Find links by example
+description: Build filters from a sample URL
+---
+
+```python
+link = TextSeek(text).extract_one(
+    Extract.link(
+        sample="https://example.com/auth/magic?token=abc&email=test@example.com"
+    )
+)
+```
+
+The library parses the sample into `scheme`, `domain`, `path`, and the set of
+required query keys (`token`, `email`). Query **values** are not compared, so
+the sample above matches:
+
+```text
+https://example.com/auth/magic?token=REAL_TOKEN&email=user@example.com
+```
+
+An invalid sample URL raises `InvalidSampleLinkError`.

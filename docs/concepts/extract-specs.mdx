@@ -1,0 +1,16 @@
+---
+title: Extract specs
+description: How search rules are built
+---
+
+You never construct internal spec classes directly. Use the `Extract` factory:
+
+```python
+Extract.code(...)   # confirmation codes
+Extract.link(...)   # links
+Extract.regex(...)  # arbitrary regex
+```
+
+Each returns an immutable spec object validated at creation time. Invalid
+settings raise immediately (for example, `InvalidCodeSpecError`), before any
+search runs.
