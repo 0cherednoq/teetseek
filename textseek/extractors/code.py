@@ -47,13 +47,19 @@ class CodeExtractor:
             for m in self.pattern.finditer(text)
             if self._passes(m.group()) and win_start <= m.start() < win_end
         ]
-        matches.sort(key=lambda r: _gap(r, phrase_start, phrase_end))
+        matches.sort(key=lambda r: _near_rank(r, phrase_start, phrase_end))
         return matches
 
 
-def _gap(result: CodeResult, phrase_start: int, phrase_end: int) -> int:
+def _near_rank(result: CodeResult, phrase_start: int, phrase_end: int) -> tuple[int, int]:
+    """Ранжирование кандидатов рядом с фразой.
+
+    Коды после фразы важнее кодов перед ней («ваш код: XXX»), а среди них
+    ближний важнее дальнего. Если кодов после фразы нет — берём ближайший
+    перед фразой (например, "G-4471 is your verification code").
+    """
     if result.start >= phrase_end:
-        return result.start - phrase_end
+        return (0, result.start - phrase_end)
     if result.end <= phrase_start:
-        return phrase_start - result.end
-    return 0
+        return (1, phrase_start - result.end)
+    return (0, 0)
