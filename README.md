@@ -1,5 +1,7 @@
 # textseek
 
+**English** | [Русский](README.ru.md)
+
 Zero-dependency Python library for searching and extracting structured data —
 confirmation codes, links, and arbitrary regex matches — from plain text.
 

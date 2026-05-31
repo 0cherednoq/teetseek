@@ -1,0 +1,35 @@
+---
+title: TextSeek
+description: Справочник API для класса TextSeek
+---
+
+## `extract_one`
+
+Находит одно совпадение для заданной спецификации.
+
+### Сигнатура
+
+```python
+def extract_one(self, spec: ExtractSpec) -> ExtractResult
+```
+
+### Возвращает
+
+Один из `CodeResult`, `LinkResult`, `RegexResult` — в зависимости от спецификации.
+
+### Вызывает
+
+- `ExtractNotFoundError` — совпадение не найдено
+- `InvalidExtractSpecError` — неизвестная спецификация
+
+## `extract_first`
+
+Возвращает первое совпадение или `None`. Та же сигнатура, возвращает `ExtractResult | None`.
+
+## `extract_all`
+
+Возвращает список совпадений (пустой, если ничего не найдено). Возвращает `list[ExtractResult]`.
+
+## `contains`
+
+Возвращает `bool` — существует ли хотя бы одно совпадение.

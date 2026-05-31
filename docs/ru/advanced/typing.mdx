@@ -1,0 +1,16 @@
+---
+title: Типизация
+description: Как textseek сохраняет типизацию результатов
+---
+
+Методы `extract_one`, `extract_first` и `extract_all` перегружены для каждого типа
+спецификации, поэтому IDE автоматически сужает тип результата:
+
+```python
+code = seek.extract_one(Extract.code(length=6))   # CodeResult
+link = seek.extract_one(Extract.link())            # LinkResult
+link.query_params["token"][0]                      # fully typed
+```
+
+Все публичные методы аннотированы, результаты — замороженные датаклассы, и `Any`
+не используется в публичном API.

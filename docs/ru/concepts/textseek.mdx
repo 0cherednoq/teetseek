@@ -1,0 +1,22 @@
+---
+title: TextSeek
+description: Основной объект-точка входа
+---
+
+`TextSeek(text)` оборачивает строку и предоставляет четыре метода. Каждый принимает
+спецификацию `Extract` и передаёт управление соответствующему экстрактору.
+
+| Метод | Возвращает |
+|---|---|
+| `extract_one` | один результат или вызывает `ExtractNotFoundError` |
+| `extract_first` | первый результат или `None` |
+| `extract_all` | список результатов (возможно, пустой) |
+| `contains` | `bool` |
+
+```python
+seek = TextSeek("Your code is 123456")
+seek.extract_one(Extract.code(length=6))
+seek.extract_first(Extract.link())
+seek.extract_all(Extract.regex(r"\d+"))
+seek.contains(Extract.code(length=6))
+```

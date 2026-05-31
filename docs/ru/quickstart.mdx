@@ -1,0 +1,31 @@
+---
+title: Быстрый старт
+description: Извлеките ваш первый код менее чем за минуту
+---
+
+## Установка
+
+```bash
+pip install textseek
+```
+
+Требуется Python 3.12+. Без зависимостей во время выполнения.
+
+## Извлечение кода
+
+```python
+from textseek import TextSeek, Extract
+
+text = "Your verification code is 123456"
+result = TextSeek(text).extract_one(Extract.code(length=6, digits=True))
+print(result.value)  # 123456
+print(result.start, result.end)
+```
+
+## Извлечение ссылок
+
+```python
+links = TextSeek(text).extract_all(Extract.link())
+for link in links:
+    print(link.domain, link.path)
+```

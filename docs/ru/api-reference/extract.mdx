@@ -1,0 +1,49 @@
+---
+title: Extract
+description: Справочник API для фабрики Extract
+---
+
+## `Extract.code`
+
+```python
+Extract.code(
+    length: int | None = None,
+    min_length: int | None = None,
+    max_length: int | None = None,
+    digits: bool = True,
+    alphabet: bool = False,
+    symbols: bool = False,
+    uppercase: bool = True,
+    lowercase: bool = True,
+    require_each_type: bool = False,
+    near: str | None = None,
+    window: int = 300,
+    pattern: str | None = None,
+) -> CodeSpec
+```
+
+Вызывает `InvalidCodeSpecError` при противоречивых настройках.
+
+## `Extract.link`
+
+```python
+Extract.link(
+    sample: str | None = None,
+    scheme: str | None = None,
+    domain: str | None = None,
+    path: str | None = None,
+    path_contains: str | None = None,
+    required_query: list[str] | None = None,
+    allow_subdomains: bool = False,
+) -> LinkSpec
+```
+
+Вызывает `InvalidSampleLinkError`, если `sample` не является допустимым URL.
+
+## `Extract.regex`
+
+```python
+Extract.regex(pattern: str, flags: int = 0) -> RegexSpec
+```
+
+Вызывает `RegexExtractError`, если `pattern` не компилируется.

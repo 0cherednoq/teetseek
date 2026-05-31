@@ -1,0 +1,19 @@
+---
+title: Обработка ошибок
+description: Предсказуемые исключения
+---
+
+```python
+from textseek import TextSeek, Extract
+from textseek import ExtractNotFoundError, InvalidCodeSpecError
+
+try:
+    code = TextSeek(text).extract_one(Extract.code(length=6))
+except ExtractNotFoundError:
+    print("Code not found")
+except InvalidCodeSpecError:
+    print("Bad code settings")
+```
+
+Все исключения наследуют `TextSeekError`. Смотрите
+[справочник по ошибкам](/api-reference/errors).

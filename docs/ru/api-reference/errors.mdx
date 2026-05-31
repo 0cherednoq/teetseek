@@ -1,0 +1,15 @@
+---
+title: Ошибки
+description: Иерархия исключений
+---
+
+```text
+TextSeekError
+├── ExtractNotFoundError      # no match (extract_one)
+├── InvalidExtractSpecError   # unrecognized spec
+├── InvalidSampleLinkError    # bad sample URL
+├── InvalidCodeSpecError      # contradictory code settings
+└── RegexExtractError         # pattern failed to compile
+```
+
+Все наследуют от `TextSeekError`, поэтому можно перехватить все ошибки одним блоком `except`.

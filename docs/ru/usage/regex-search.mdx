@@ -1,0 +1,16 @@
+---
+title: Поиск по регулярным выражениям
+description: Произвольное извлечение
+---
+
+```python
+result = TextSeek(text).extract_one(Extract.regex(r"Order ID:\s*([A-Z0-9\-]+)"))
+result.value       # first group if the pattern has groups, else the whole match
+result.groups      # tuple of groups
+result.groupdict   # named groups
+result.start
+result.end
+```
+
+Если в шаблоне есть группы, `value` содержит первую группу; иначе — всё совпадение целиком.
+Некорректный шаблон вызывает `RegexExtractError` в момент вызова `Extract.regex`.

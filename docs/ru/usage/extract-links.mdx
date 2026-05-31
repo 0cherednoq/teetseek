@@ -1,0 +1,31 @@
+---
+title: Извлечение ссылок
+description: Ссылки как структурированные объекты
+---
+
+```python
+links = TextSeek(text).extract_all(Extract.link())
+```
+
+Ссылки возвращаются как объекты `LinkResult`, а не простые строки:
+
+```python
+link = TextSeek(text).extract_one(Extract.link(domain="example.com"))
+link.value
+link.scheme        # "https"
+link.domain        # "example.com"
+link.path          # "/auth/magic"
+link.query         # "token=abc123&email=test@example.com"
+link.fragment      # "top"
+link.query_params  # {"token": ["abc123"], "email": ["test@example.com"]}
+```
+
+## Фильтрация
+
+```python
+Extract.link(domain="example.com")
+Extract.link(domain="example.com", path="/auth/magic")
+Extract.link(domain="example.com", path_contains="magic")
+Extract.link(domain="example.com", required_query=["token", "email"])
+Extract.link(domain="example.com", allow_subdomains=True)
+```

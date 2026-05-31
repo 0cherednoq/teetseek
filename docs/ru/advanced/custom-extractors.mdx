@@ -1,0 +1,18 @@
+---
+title: Пользовательские экстракторы
+description: Расширение textseek собственным экстрактором
+---
+
+Экстрактор — это любой объект, реализующий протокол `Extractor`:
+
+```python
+from typing import Protocol
+from textseek.results import ExtractResult
+
+class Extractor(Protocol):
+    def find_all(self, text: str) -> list[ExtractResult]: ...
+```
+
+Чтобы добавить новый вид извлечения, напишите датакласс-спецификацию, фабричный метод и
+класс-экстрактор с методом `find_all`, затем зарегистрируйте его в `TextSeek._extractor`.
+Встроенные экстракторы `code`, `link` и `regex` следуют именно этой структуре.

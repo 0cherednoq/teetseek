@@ -1,0 +1,22 @@
+---
+title: Поиск ссылок по примеру
+description: Построение фильтров на основе примера URL
+---
+
+```python
+link = TextSeek(text).extract_one(
+    Extract.link(
+        sample="https://example.com/auth/magic?token=abc&email=test@example.com"
+    )
+)
+```
+
+Библиотека разбирает пример на `scheme`, `domain`, `path` и набор обязательных ключей
+запроса (`token`, `email`). **Значения** параметров запроса не сравниваются, поэтому
+приведённый пример совпадает с:
+
+```text
+https://example.com/auth/magic?token=REAL_TOKEN&email=user@example.com
+```
+
+Некорректный URL примера вызывает `InvalidSampleLinkError`.

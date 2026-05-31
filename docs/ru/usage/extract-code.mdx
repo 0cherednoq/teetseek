@@ -1,0 +1,54 @@
+---
+title: Извлечение кодов
+description: Числовые, буквенно-цифровые и символьные коды
+---
+
+## Числовой код
+
+```python
+TextSeek(text).extract_one(Extract.code(length=6, digits=True))
+```
+
+## Буквенно-цифровой код
+
+```python
+Extract.code(length=8, digits=True, alphabet=True)  # matches A1B2C3D4
+```
+
+## Код с символами
+
+```python
+Extract.code(min_length=8, max_length=16, digits=True, alphabet=True, symbols=True)
+# matches A8F3-K2P9
+```
+
+Стандартный набор символов — `-` и `_`.
+
+## Требование каждого типа
+
+```python
+Extract.code(length=8, digits=True, alphabet=True, require_each_type=True)
+# matches A1B2C3D4, rejects 12345678 and ABCDEFGH
+```
+
+## Рядом с фразой
+
+```python
+Extract.code(length=6, digits=True, near="verification code", window=300)
+```
+
+Библиотека находит фразу, берёт окно вокруг неё и отдаёт предпочтение коду,
+который появляется **после** фразы (обычный паттерн «ваш код — XXX»),
+возвращаясь к ближайшему коду перед фразой, если после неё ничего нет.
+Полезно, когда в тексте встречается несколько чисел.
+
+<Note>
+При использовании `near` метод `extract_all` возвращает совпадения, отсортированные по близости к фразе
+(сначала ближайшие), а не в порядке следования в исходном тексте. Поэтому `extract_one`/`extract_first`
+возвращают код с наилучшим рейтингом.
+</Note>
+
+## Строгие границы
+
+Код сопоставляется как целый токен. `Extract.code(length=6, digits=True)` **не**
+совпадает с `123456` внутри `1234567890`.
