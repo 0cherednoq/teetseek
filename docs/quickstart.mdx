@@ -11,22 +11,60 @@ pip install textseek
 
 Requires Python 3.12+. No runtime dependencies.
 
-## Extract a code
+## Extract a code from a confirmation email
 
 ```python
 from textseek import TextSeek, Extract
 
-text = "Your verification code is 123456"
-result = TextSeek(text).extract_one(Extract.code(length=6, digits=True))
-print(result.value)  # 123456
-print(result.start, result.end)
+email = """\
+From: Acme <no-reply@acme.com>
+Subject: Your verification code
+
+Hi Alex,
+
+Your verification code is 482913. It expires in 10 minutes.
+If you didn't request this, you can ignore this email.
+"""
+
+code = TextSeek(email).extract_one(
+    Extract.code(length=6, digits=True, near="verification code")
+)
+print(code.value)  # 482913
 ```
 
-## Extract links
+`near="verification code"` anchors the search to the phrase, so a stray number
+elsewhere in the email is not picked by mistake.
+
+## Extract a link from a magic-link email
 
 ```python
-text = "Open https://example.com/auth/magic?token=abc to continue."
-links = TextSeek(text).extract_all(Extract.link())
-for link in links:
-    print(link.domain, link.path)  # example.com /auth/magic
+from textseek import TextSeek, Extract
+
+email = """\
+From: Acme <no-reply@acme.com>
+Subject: Sign in to Acme
+
+Click the link below to sign in:
+https://acme.com/auth/magic?token=abc123&email=alex@acme.com
+
+This link expires in 15 minutes.
+"""
+```
+
+**Regular** — filter by domain and read the structured parts:
+
+```python
+link = TextSeek(email).extract_one(Extract.link(domain="acme.com"))
+print(link.path)                      # /auth/magic
+print(link.query_params["token"][0])  # abc123
+```
+
+**By example** — pass a sample URL and match links shaped like it (its scheme,
+host, path, and query keys become the filter; values are ignored):
+
+```python
+link = TextSeek(email).extract_one(
+    Extract.link(sample="https://acme.com/auth/magic?token=TEMPLATE&email=user@acme.com")
+)
+print(link.value)  # https://acme.com/auth/magic?token=abc123&email=alex@acme.com
 ```
