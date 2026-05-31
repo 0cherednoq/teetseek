@@ -11,6 +11,7 @@ class CodeExtractor:
         self.pattern = build_code_pattern(spec)
 
     def find_all(self, text: str) -> list[CodeResult]:
+        """Найти все коды. При near=... результат упорядочен по близости к фразе."""
         if self.spec.near is not None:
             return self._find_near(text)
         return [

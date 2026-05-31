@@ -42,6 +42,12 @@ that appears **after** the phrase (the usual "your code is XXX" pattern),
 falling back to the nearest code before the phrase if none follow. Useful when
 several numbers appear in the text.
 
+<Note>
+With `near`, `extract_all` returns matches ordered by proximity to the phrase
+(nearest first), not in source-text order. `extract_one`/`extract_first`
+therefore return the best-ranked code.
+</Note>
+
 ## Strict boundaries
 
 A code is matched as a whole token. `Extract.code(length=6, digits=True)` does
