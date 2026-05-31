@@ -3,33 +3,27 @@ title: TextSeek
 description: API reference for the TextSeek class
 ---
 
-## `extract_one`
+`TextSeek(text: str)` wraps a string. Each method takes an `Extract` spec and is
+`@overload`-ed per spec type, so the result type is narrowed automatically.
 
-Finds one match for the given spec.
+## `extract_one(spec) -> ExtractResult`
 
-### Signature
+The single best match. Returns `CodeResult` / `LinkResult` / `RegexResult`
+according to the spec.
 
-```python
-def extract_one(self, spec: ExtractSpec) -> ExtractResult
-```
+Raises `ExtractNotFoundError` if there is no match; `InvalidExtractSpecError` if
+the spec type is unrecognized.
 
-### Returns
+## `extract_first(spec) -> ExtractResult | None`
 
-One of `CodeResult`, `LinkResult`, `RegexResult`, depending on the spec.
+The first match, or `None`. With `near`, "first" means best-ranked, not
+source-order.
 
-### Raises
+## `extract_all(spec) -> list[ExtractResult]`
 
-- `ExtractNotFoundError` — no match
-- `InvalidExtractSpecError` — unrecognized spec
+All matches (empty list if none). For `code` with `near`, results are ordered by
+proximity to the phrase (after-phrase first); otherwise in source-text order.
 
-## `extract_first`
+## `contains(spec) -> bool`
 
-Returns the first match or `None`. Same signature, returns `ExtractResult | None`.
-
-## `extract_all`
-
-Returns a list of matches (empty if none). Returns `list[ExtractResult]`.
-
-## `contains`
-
-Returns `bool` — whether any match exists.
+`True` if at least one match exists. Equivalent to `extract_first(spec) is not None`.

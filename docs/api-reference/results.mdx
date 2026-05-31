@@ -1,19 +1,39 @@
 ---
 title: Results
-description: Result dataclasses
+description: Result dataclasses and their fields
 ---
 
-All results are `@dataclass(slots=True, frozen=True)`.
+All results are `@dataclass(slots=True, frozen=True)` and share `value`,
+`start`, `end`.
+
+| Field | Type | Meaning |
+|---|---|---|
+| `value` | `str` | The matched substring. For links, trailing punctuation `.,;:!?)]}>"'` is stripped. |
+| `start` | `int` | Start index in the source text. |
+| `end` | `int` | End index (exclusive) in the source text. |
 
 ## CodeResult
 
-`value: str`, `start: int`, `end: int`
+Adds nothing beyond `value`, `start`, `end`.
 
 ## LinkResult
 
-`value`, `start`, `end`, `scheme`, `domain`, `host`, `port: int | None`,
-`path`, `query`, `fragment`, `query_params: dict[str, list[str]]`
+| Field | Type | Notes |
+|---|---|---|
+| `scheme` | `str` | e.g. `"https"`. |
+| `domain` | `str` | Hostname. **Alias of `host`** — same value. |
+| `host` | `str` | Hostname. |
+| `port` | `int \| None` | `None` if absent or invalid. |
+| `path` | `str` | e.g. `"/auth/magic"`. |
+| `query` | `str` | Raw query string. |
+| `fragment` | `str` | Part after `#`. |
+| `query_params` | `dict[str, list[str]]` | Parsed query; blank values are kept (`?a=` → `{"a": [""]}`). |
 
 ## RegexResult
 
-`value`, `start`, `end`, `groups: tuple[str, ...]`, `groupdict: dict[str, str]`
+| Field | Type | Notes |
+|---|---|---|
+| `groups` | `tuple[str, ...]` | Positional groups. |
+| `groupdict` | `dict[str, str]` | Named groups. |
+
+`value` is the first group if the pattern has groups, otherwise the whole match.
