@@ -1,0 +1,32 @@
+# textseek
+
+> Zero-dependency Python library (3.12+) for extracting confirmation codes,
+> http/https links, and arbitrary regex matches from plain text the caller
+> supplies. No network, no I/O — you fetch the text, textseek pulls structured
+> values out of it.
+
+## Getting started
+- [Introduction](/introduction): what textseek does and does not do
+- [Quickstart](/quickstart): extract your first code and link
+
+## Concepts
+- [TextSeek](/concepts/textseek): the entry-point object and its four methods
+- [Extract specs](/concepts/extract-specs): how validated search rules are built
+- [Results](/concepts/results): typed frozen result objects
+
+## Usage
+- [Extract codes](/usage/extract-code): numeric, alphanumeric, symbol, and near-phrase codes
+- [Extract links](/usage/extract-links): links as structured LinkResult objects (http/https only)
+- [Find links by example](/usage/link-by-sample): build filters from a sample URL
+- [Regex search](/usage/regex-search): arbitrary regex extraction with typed results
+- [Error handling](/usage/error-handling): the TextSeekError hierarchy
+
+## API reference
+- [TextSeek](/api-reference/textseek): extract_one / extract_first / extract_all / contains
+- [Extract](/api-reference/extract): full parameter contract for code/link/regex
+- [Results](/api-reference/results): result dataclass fields and types
+- [Errors](/api-reference/errors): exceptions and their triggers
+
+## Advanced
+- [Custom extractors](/advanced/custom-extractors): add a new extraction kind
+- [Typing](/advanced/typing): how results stay statically typed
