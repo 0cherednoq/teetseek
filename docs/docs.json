@@ -1,0 +1,94 @@
+{
+  "$schema": "https://mintlify.com/docs.json",
+  "theme": "mint",
+  "name": "textseek",
+  "colors": {
+    "primary": "#16A34A",
+    "light": "#4ADE80",
+    "dark": "#15803D"
+  },
+  "navigation": {
+    "languages": [
+      {
+        "language": "en",
+        "groups": [
+          {
+            "group": "Getting Started",
+            "pages": ["introduction", "quickstart"]
+          },
+          {
+            "group": "Concepts",
+            "pages": [
+              "concepts/textseek",
+              "concepts/extract-specs",
+              "concepts/results"
+            ]
+          },
+          {
+            "group": "Usage",
+            "pages": [
+              "usage/extract-code",
+              "usage/extract-links",
+              "usage/link-by-sample",
+              "usage/regex-search",
+              "usage/error-handling"
+            ]
+          },
+          {
+            "group": "API Reference",
+            "pages": [
+              "api-reference/textseek",
+              "api-reference/extract",
+              "api-reference/results",
+              "api-reference/errors"
+            ]
+          },
+          {
+            "group": "Advanced",
+            "pages": ["advanced/custom-extractors", "advanced/typing"]
+          }
+        ]
+      },
+      {
+        "language": "ru",
+        "groups": [
+          {
+            "group": "Начало работы",
+            "pages": ["ru/introduction", "ru/quickstart"]
+          },
+          {
+            "group": "Концепции",
+            "pages": [
+              "ru/concepts/textseek",
+              "ru/concepts/extract-specs",
+              "ru/concepts/results"
+            ]
+          },
+          {
+            "group": "Использование",
+            "pages": [
+              "ru/usage/extract-code",
+              "ru/usage/extract-links",
+              "ru/usage/link-by-sample",
+              "ru/usage/regex-search",
+              "ru/usage/error-handling"
+            ]
+          },
+          {
+            "group": "Справочник API",
+            "pages": [
+              "ru/api-reference/textseek",
+              "ru/api-reference/extract",
+              "ru/api-reference/results",
+              "ru/api-reference/errors"
+            ]
+          },
+          {
+            "group": "Продвинутое",
+            "pages": ["ru/advanced/custom-extractors", "ru/advanced/typing"]
+          }
+        ]
+      }
+    ]
+  }
+}
