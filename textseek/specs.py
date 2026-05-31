@@ -2,6 +2,7 @@ import re
 from dataclasses import dataclass
 
 from .errors import InvalidCodeSpecError, RegexExtractError
+from .links import parse_sample
 
 
 @dataclass(slots=True, frozen=True)
@@ -93,6 +94,32 @@ class Extract:
             near=near,
             window=window,
             pattern=pattern,
+        )
+
+    @staticmethod
+    def link(
+        sample: str | None = None,
+        scheme: str | None = None,
+        domain: str | None = None,
+        path: str | None = None,
+        path_contains: str | None = None,
+        required_query: list[str] | None = None,
+        allow_subdomains: bool = False,
+    ) -> LinkSpec:
+        if sample is not None:
+            s_scheme, s_domain, s_path, s_keys = parse_sample(sample)
+            scheme = scheme if scheme is not None else s_scheme
+            domain = domain if domain is not None else s_domain
+            path = path if path is not None else s_path
+            if required_query is None and s_keys is not None:
+                required_query = list(s_keys)
+        return LinkSpec(
+            scheme=scheme,
+            domain=domain,
+            path=path,
+            path_contains=path_contains,
+            required_query=tuple(required_query) if required_query is not None else None,
+            allow_subdomains=allow_subdomains,
         )
 
     @staticmethod
