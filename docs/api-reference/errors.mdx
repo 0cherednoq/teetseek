@@ -1,15 +1,25 @@
 ---
 title: Errors
-description: Exception hierarchy
+description: Exception hierarchy and what triggers each
 ---
 
 ```text
-TextSeekError
-├── ExtractNotFoundError      # no match (extract_one)
-├── InvalidExtractSpecError   # unrecognized spec
-├── InvalidSampleLinkError    # bad sample URL
-├── InvalidCodeSpecError      # contradictory code settings
-└── RegexExtractError         # pattern failed to compile
+TextSeekError                 # base — catch this for everything
+├── ExtractNotFoundError      # extract_one found no match
+├── InvalidExtractSpecError   # TextSeek got an unrecognized spec type
+├── InvalidSampleLinkError    # Extract.link(sample=...) URL lacks scheme/host
+├── InvalidCodeSpecError      # Extract.code(...) settings contradict each other
+└── RegexExtractError         # Extract.regex(...) pattern failed to compile
 ```
 
-All inherit from `TextSeekError`, so you can catch everything with one except.
+| Exception | Raised by | When |
+|---|---|---|
+| `ExtractNotFoundError` | `extract_one` | No match in the text. |
+| `InvalidExtractSpecError` | `TextSeek` dispatch | Spec is not a known type. |
+| `InvalidSampleLinkError` | `Extract.link` | `sample` has no scheme or host. |
+| `InvalidCodeSpecError` | `Extract.code` | Contradictory code settings (see Extract reference). |
+| `RegexExtractError` | `Extract.regex` | Pattern does not compile. |
+
+All inherit from `TextSeekError`, so one `except TextSeekError` catches every
+library error. Validation errors are raised at `Extract.*` time, before any
+search runs.

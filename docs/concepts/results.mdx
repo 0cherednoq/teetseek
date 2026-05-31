@@ -3,14 +3,21 @@ title: Results
 description: Typed result objects
 ---
 
-Every result is a frozen dataclass with `value`, `start`, and `end`:
+Every result is a frozen dataclass carrying `value`, `start`, and `end`:
 
 | Field | Meaning |
 |---|---|
-| `value` | the matched value |
+| `value` | the matched value (for links, trailing punctuation is stripped) |
 | `start` | start index in the source text |
-| `end` | end index in the source text |
+| `end` | end index (exclusive) in the source text |
 
-`CodeResult` adds nothing more. `LinkResult` adds `scheme`, `domain`, `host`,
-`port`, `path`, `query`, `fragment`, `query_params`. `RegexResult` adds
-`groups` and `groupdict`.
+`CodeResult` adds nothing more.
+
+`LinkResult` adds `scheme`, `domain`, `host`, `port`, `path`, `query`,
+`fragment`, and `query_params`. **`domain` and `host` are the same hostname** —
+`domain` is a convenience alias. `query_params` keeps blank values
+(`?flag=` → `{"flag": [""]}`).
+
+`RegexResult` adds `groups` (positional) and `groupdict` (named).
+
+See the [results reference](/api-reference/results) for full types.

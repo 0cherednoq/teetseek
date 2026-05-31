@@ -7,10 +7,18 @@ You never construct internal spec classes directly. Use the `Extract` factory:
 
 ```python
 Extract.code(...)   # confirmation codes
-Extract.link(...)   # links
+Extract.link(...)   # http/https links
 Extract.regex(...)  # arbitrary regex
 ```
 
-Each returns an immutable spec object validated at creation time. Invalid
-settings raise immediately (for example, `InvalidCodeSpecError`), before any
-search runs.
+Each returns an immutable spec object **validated at creation time** — invalid
+settings raise immediately (e.g. `InvalidCodeSpecError`), before any search runs.
+
+Defaults worth knowing:
+
+- `Extract.code()` matches digit-only tokens of length ≥ 1, with class-relative
+  boundaries (a token must be bordered by characters outside its allowed set).
+- `Extract.link()` matches every `http`/`https` URL in the text; add filters to
+  narrow it.
+- `Extract.regex(pattern)` compiles `pattern` eagerly; a bad pattern raises
+  `RegexExtractError` here, not during the search.

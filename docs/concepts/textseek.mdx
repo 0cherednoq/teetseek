@@ -20,3 +20,10 @@ seek.extract_first(Extract.link())
 seek.extract_all(Extract.regex(r"\d+"))
 seek.contains(Extract.code(length=6))
 ```
+
+<Note>
+`extract_all` returns matches in source-text order, **except** for
+`Extract.code(near=...)`, where results are ranked by proximity to the phrase
+(after-phrase codes first). `extract_one`/`extract_first` then return the
+best-ranked match.
+</Note>
